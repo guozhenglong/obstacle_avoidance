@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<launch>
+    <arg name="navdata_topic_name1" 	default="/uav1/ground_truth/state" />
+    <arg name="input_cmd_topic_name1" 	default="/uav1/vel_cmd_input" />
+    <arg name="output_cmd_topic_name1" 	default="/uav1/velocity_cmd" />
+            
+    <arg name="navdata_topic_name2"     default="/uav2/ground_truth/state" />
+    <arg name="input_cmd_topic_name2"   default="/uav2/vel_cmd_input" />
+    <arg name="output_cmd_topic_name2"  default="/uav2/vel_cmd" />
+    
+	<!-- Launches the generate geo cmd node -->
+    <node pkg="multi_drone_safe_ctrl" type="gen_geo_cmd_node" name="gen_geo_cmd_node" output="screen">
+
+        <param name="debug" value="false" />
+        <param name="Vmax" value="1.0" />
+        <param name="l" value="0.5" />
+        <param name="rm" value="0.8" />
+        <param name="ra" value="2.0" />
+        <param name="rh" value="5.0" />
+        <param name="rs" value="0.01" />
+        <param name="e" value="0.01" />
+        <param name="kx" value="1.0" />
+        <param name="ky" value="1.0" />
+        <param name="x_b" value="100.0" />
+        <param name="y_b" value="100.0" />
+        <param name="gain_cmd" value="0.3"/>
+        <param name="Hz" value="20.0"/>
+
+        <remap from="/cmd_input1"   to="$(arg input_cmd_topic_name1)"/>         
+        <remap from="/cmd_input2"   to="$(arg input_cmd_topic_name2)"/> 
+        <remap from="/navdata_uav1" to="$(arg navdata_topic_name1)"/>    
+        <remap from="/navdata_uav2" to="$(arg navdata_topic_name2)"/> 
+        <remap from="/uav_cmd_vel1" to="$(arg output_cmd_topic_name1)"/>   
+        <remap from="/uav_cmd_vel2" to="$(arg output_cmd_topic_name2)"/> 
+    </node>
+</launch>
